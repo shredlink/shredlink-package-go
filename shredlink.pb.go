@@ -4,7 +4,7 @@
 // 	protoc        v5.29.3
 // source: shredlink.proto
 
-package shredlink_package_go_git
+package shredlink_package_go
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -761,7 +761,7 @@ const file_shredlink_proto_rawDesc = "" +
 	"\amessage\x18\x02 \x01(\v2\x12.shredlink.MessageR\amessage2\xce\x01\n" +
 	"\x10ShredlinkService\x12J\n" +
 	"\x10SubscribeEntries\x12\".shredlink.SubscribeEntriesRequest\x1a\x10.shredlink.Entry0\x01\x12n\n" +
-	"\x15SubscribeTransactions\x12'.shredlink.SubscribeTransactionsRequest\x1a(.shredlink.SubscribeTransactionsResponse(\x010\x01B/Z-github.com/shredlink/shredlink-package-go.gitb\x06proto3"
+	"\x15SubscribeTransactions\x12'.shredlink.SubscribeTransactionsRequest\x1a(.shredlink.SubscribeTransactionsResponse(\x010\x01B+Z)github.com/shredlink/shredlink-package-gob\x06proto3"
 
 var (
 	file_shredlink_proto_rawDescOnce sync.Once

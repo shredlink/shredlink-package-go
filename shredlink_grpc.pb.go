@@ -4,7 +4,7 @@
 // - protoc             v5.29.3
 // source: shredlink.proto
 
-package shredlink_package_go_git
+package shredlink_package_go
 
 import (
 	context "context"

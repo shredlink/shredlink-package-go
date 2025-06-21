@@ -1,6 +1,6 @@
 syntax = "proto3";
 package shredlink;
-option go_package = "github.com/shredlink/shredlink-package-go.git";
+option go_package = "github.com/shredlink/shredlink-package-go";
 
 import "google/protobuf/timestamp.proto";
 
