@@ -1,4 +1,4 @@
-module shredlink/shredlink-package-go
+module github.com/shredlink/shredlink-package-go
 
 go 1.21
 
