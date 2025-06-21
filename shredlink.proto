@@ -1,0 +1,95 @@
+syntax = "proto3";
+package shredlink;
+option go_package = "github.com/shredlink/shredlink-package-go.git";
+
+import "google/protobuf/timestamp.proto";
+
+// Service definition with renamed methods for consistency
+service ShredlinkService {
+  rpc SubscribeEntries(SubscribeEntriesRequest) returns (stream Entry);
+  rpc SubscribeTransactions(stream SubscribeTransactionsRequest) returns (stream SubscribeTransactionsResponse);
+}
+
+// Request messages
+message SubscribeEntriesRequest {
+  // Future: add filters for entry subscription
+  // Reserved field numbers for future expansion
+  reserved 1 to 10;
+}
+
+message SubscribeTransactionsRequest {
+  // Using oneof for better performance and type safety
+  oneof request_type {
+    SubscribeRequestFilterTransactions filter = 1;
+    bool subscribe_all = 2;
+  }
+  // Moved transactions map to top-level field with lower field number
+  map<string, SubscribeRequestFilterTransactions> transactions = 3;
+}
+
+message SubscribeTransactionsResponse {
+  // Reordered fields by frequency of use and size (smaller fields first)
+  repeated string filters = 1;
+  google.protobuf.Timestamp created_at = 2;
+  SubscribeUpdateTransaction transaction = 3;
+}
+
+message SubscribeUpdateTransaction {
+  // Reordered for better packing (smaller fields first)
+  uint64 slot = 1;
+  Transaction transaction = 2;
+}
+
+message SubscribeRequestFilterTransactions {
+  // Reordered and optimized field numbers
+  repeated string account_include = 1;
+  repeated string account_exclude = 2;  
+  repeated string account_required = 3;
+}
+
+// Core data structures optimized for performance
+message Entry {
+  // Reordered: smaller field first for better wire format efficiency
+  uint64 slot = 1;
+  // Using more efficient field number
+  bytes entries = 2;
+}
+
+message MessageHeader {
+  // Packed repeated fields would be more efficient, but these are individual values
+  // Reordered by likely frequency of non-zero values
+  uint32 num_required_signatures = 1;
+  uint32 num_readonly_signed_accounts = 2;
+  uint32 num_readonly_unsigned_accounts = 3;
+}
+
+message CompiledInstruction {
+  // Reordered: program_id_index is smaller and more frequently accessed
+  uint32 program_id_index = 1;
+  bytes accounts = 2;
+  bytes data = 3;
+}
+
+message MessageAddressTableLookup {
+  // 32-byte account key - kept as bytes for efficiency
+  bytes account_key = 1;
+  // Packed repeated would be more efficient for indexes, but keeping bytes for compatibility
+  bytes writable_indexes = 2;
+  bytes readonly_indexes = 3;
+}
+
+message Message {
+  // Reordered by size and access patterns
+  MessageHeader header = 1;
+  bytes recent_blockhash = 2;  // 32 bytes, moved up
+  repeated bytes account_keys = 3;
+  repeated CompiledInstruction instructions = 4;
+  bool versioned = 5;  // Small field, moved down
+  repeated MessageAddressTableLookup address_table_lookups = 6;
+}
+
+message Transaction {
+  // Signatures first as they're typically accessed for verification
+  repeated bytes signatures = 1;
+  Message message = 2;
+} 
